@@ -1,5 +1,22 @@
 /* eslint-disable comma-dangle, no-multi-spaces, key-spacing */
-
+const adminSettings = {
+  token: {
+    schema: {
+      type: 'string',
+      title: 'Martan Integration Token',
+      description: 'Token de integrações pode ser gerado em (https://admin.martan.app/settings)'
+    },
+    hide: true
+  },
+  store_id: {
+    schema: {
+      type: 'number',
+      title: 'Martan Integration Store-ID',
+      description: 'ID de integração pode ser consultado em (https://admin.martan.app/settings)'
+    },
+    hide: false
+  }
+}
 /**
  * Edit base E-Com Plus Application object here.
  * Ref.: https://developers.e-com.plus/docs/api/#/store/applications/
@@ -7,8 +24,8 @@
 
 const app = {
   app_id: 119392,
-  title: 'My Awesome E-Com Plus App',
-  slug: 'my-awesome-app',
+  title: 'Martan',
+  slug: 'martan-app',
   type: 'external',
   state: 'active',
   authentication: true,
@@ -54,7 +71,7 @@ const app = {
       'POST'           // Create procedures to receive webhooks
     ],
     products: [
-      // 'GET',           // Read products with public and private fields
+      'GET',           // Read products with public and private fields
       // 'POST',          // Create products
       // 'PATCH',         // Edit products
       // 'PUT',           // Overwrite products
@@ -75,21 +92,21 @@ const app = {
       // 'DELETE',        // Delete categories
     ],
     customers: [
-      // 'GET',           // List/read customers
+      'GET',           // List/read customers
       // 'POST',          // Create customers
       // 'PATCH',         // Edit customers
       // 'PUT',           // Overwrite customers
       // 'DELETE',        // Delete customers
     ],
     orders: [
-      // 'GET',           // List/read orders with public and private fields
+      'GET',           // List/read orders with public and private fields
       // 'POST',          // Create orders
       // 'PATCH',         // Edit orders
       // 'PUT',           // Overwrite orders
       // 'DELETE',        // Delete orders
     ],
     carts: [
-      // 'GET',           // List all carts (no auth needed to read specific cart only)
+      'GET',           // List all carts (no auth needed to read specific cart only)
       // 'POST',          // Create carts
       // 'PATCH',         // Edit carts
       // 'PUT',           // Overwrite carts
@@ -137,39 +154,7 @@ const app = {
      */
   },
 
-  admin_settings: {
-    /**
-     * JSON schema based fields to be configured by merchant and saved to app `data` / `hidden_data`, such as:
-
-     webhook_uri: {
-       schema: {
-         type: 'string',
-         maxLength: 255,
-         format: 'uri',
-         title: 'Notifications URI',
-         description: 'Unique notifications URI available on your Custom App dashboard'
-       },
-       hide: true
-     },
-     token: {
-       schema: {
-         type: 'string',
-         maxLength: 50,
-         title: 'App token'
-       },
-       hide: true
-     },
-     opt_in: {
-       schema: {
-         type: 'boolean',
-         default: false,
-         title: 'Some config option'
-       },
-       hide: false
-     },
-
-     */
-  }
+  admin_settings: adminSettings
 }
 
 /**
@@ -178,9 +163,6 @@ const app = {
  */
 
 const procedures = []
-
-/**
- * Uncomment and edit code above to configure `triggers` and receive respective `webhooks`:
 
 const { baseUri } = require('./__env')
 
@@ -196,10 +178,7 @@ procedures.push({
 
     // Receive notifications when order financial/fulfillment status are set or changed:
     // Obs.: you probably SHOULD NOT enable the orders triggers below and the one above (create) together.
-    {
-      resource: 'orders',
-      field: 'financial_status',
-    },
+
     {
       resource: 'orders',
       field: 'fulfillment_status',
@@ -208,26 +187,14 @@ procedures.push({
     // Receive notifications when products/variations stock quantity changes:
     {
       resource: 'products',
-      field: 'quantity',
-    },
-    {
-      resource: 'products',
-      subresource: 'variations',
-      field: 'quantity'
+      action: 'create',
     },
 
     // Receive notifications when cart is edited:
     {
       resource: 'carts',
-      action: 'change',
+      action: 'create',
     },
-
-    // Receive notifications when customer is deleted:
-    {
-      resource: 'customers',
-      action: 'delete',
-    },
-
     // Feel free to create custom combinations with any Store API resource, subresource, action and field.
   ],
 
@@ -242,9 +209,6 @@ procedures.push({
     }
   ]
 })
-
- * You may also edit `routes/ecom/webhook.js` to treat notifications properly.
- */
 
 exports.app = app
 
