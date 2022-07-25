@@ -1,5 +1,5 @@
 {
-  "name": "functions",
+  "name": "martan-integrations-ecomplus",
   "description": "Cloud Functions for Firebase",
   "scripts": {
     "serve": "firebase serve --only functions",
