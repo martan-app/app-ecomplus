@@ -1,5 +1,6 @@
 // read configured E-Com Plus app data
 const getAppData = require('./../../lib/store-api/get-app-data')
+const whHandler = require('./../../lib/webhook-handler')
 
 const SKIP_TRIGGER_NAME = 'SkipTrigger'
 const ECHO_SUCCESS = 'SUCCESS'
@@ -31,7 +32,13 @@ exports.post = ({ appSdk }, req, res) => {
       }
 
       /* DO YOUR CUSTOM STUFF HERE */
+      if (!appData.integration_token || !appData.integration_store_id) {
+        const err = new Error()
+        err.name = SKIP_TRIGGER_NAME
+        throw err
+      }
 
+      whHandler({ appData, appSdk, storeId, trigger })
       // all done
       res.send(ECHO_SUCCESS)
     })
