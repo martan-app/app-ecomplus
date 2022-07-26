@@ -1,7 +1,7 @@
 {
-  "app_id": 9000,
-  "title": "My Awesome E-Com Plus App",
-  "slug": "my-awesome-ecom-plus-app",
+  "app_id": 119392,
+  "title": "Martan",
+  "slug": "martan-app",
   "type": "external",
   "state": "active",
   "authentication": true,
@@ -13,12 +13,20 @@
     "procedures": [
       "POST"
     ],
-    "products": [],
+    "products": [
+      "GET"
+    ],
     "brands": [],
     "categories": [],
-    "customers": [],
-    "orders": [],
-    "carts": [],
+    "customers": [
+      "GET"
+    ],
+    "orders": [
+      "GET"
+    ],
+    "carts": [
+      "GET"
+    ],
     "orders/fulfillments": [],
     "orders/payments_history": [],
     "products/quantity": [],
@@ -26,6 +34,24 @@
     "products/price": [],
     "products/variations/price": []
   },
-  "auth_callback_uri": "https://us-central1-ecom-app-boilerplate.cloudfunctions.net/app/ecom/auth-callback",
+  "admin_settings": {
+    "token": {
+      "schema": {
+        "type": "string",
+        "title": "Martan Integration Token",
+        "description": "Token de integrações pode ser gerado em (https://admin.martan.app/settings)"
+      },
+      "hide": true
+    },
+    "store_id": {
+      "schema": {
+        "type": "number",
+        "title": "Martan Integration Store-ID",
+        "description": "ID de integração pode ser consultado em (https://admin.martan.app/settings)"
+      },
+      "hide": false
+    }
+  },
+  "auth_callback_uri": "https://us-central1-martan-integrations-ecomplus.cloudfunctions.net/app/ecom/auth-callback",
   "version": "1.0.0"
 }
