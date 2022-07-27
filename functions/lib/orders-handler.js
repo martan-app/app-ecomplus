@@ -1,5 +1,6 @@
 const martanApi = require("./martan-api");
 const functions = require("firebase-functions");
+const SKIP_TRIGGER_NAME = "SkipTrigger";
 
 module.exports = async ({ appSdk, appData, storeId, orderId }) => {
   appSdk
@@ -11,7 +12,10 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
         order.fulfillment_status.current &&
         order.fulfillment_status.current !== "delivered"
       ) {
-        return;
+        // ignore current trigger
+        const err = new Error();
+        err.name = SKIP_TRIGGER_NAME;
+        throw err;
       }
 
       const store = await appSdk
@@ -113,6 +117,10 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
       );
     })
     .catch((error) => {
+      if (err.name === SKIP_TRIGGER_NAME) {
+        return
+      }
+
       functions.logger.error(
         `Erro ao tentar enviar pedido ${orderId} para Martan`,
         error
