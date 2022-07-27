@@ -117,7 +117,7 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
       );
     })
     .catch((error) => {
-      if (err.name === SKIP_TRIGGER_NAME) {
+      if (error.name === SKIP_TRIGGER_NAME) {
         return
       }
 
