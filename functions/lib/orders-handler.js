@@ -1,94 +1,124 @@
-module.exports = (orderId, appSdk,) => {
+const martanApi = require("./martan-api");
+const functions = require("firebase-functions");
+
+module.exports = async ({ appSdk, appData, storeId, orderId }) => {
   appSdk
     .apiRequest(storeId, `orders/${orderId}.json`)
-    .then(async (response) => {
-      const order = response.data
-
-      if (order.fulfillment_status &&
+    .then(async ({ response }) => {
+      const order = response.data;
+      if (
+        order.fulfillment_status &&
         order.fulfillment_status.current &&
-        order.fulfillment_status.current !== 'delivered') {
-          return
+        order.fulfillment_status.current !== "delivered"
+      ) {
+        return;
       }
-      
+
       const store = await appSdk
-        .apiRequest(storeId, '/stores/me.json', 'GET')
-        .then(store => store.response.data)
+        .apiRequest(storeId, "/stores/me.json", "GET")
+        .then((store) => store.response.data);
 
-      const { items } = order
-      const promises = []
-      const trustVoxItens = []
+      const { items } = order;
 
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i]
-        const promise = appSdk
-          .apiRequest(storeId, `products/${item.product_id}.json`, 'GET')
-          .then(resp => resp.response.data)
-          .then(product => {
-            const photosUrls = []
-            product.pictures.forEach(picture => {
-              if (picture.zoom) {
-                const { url } = picture.zoom
-                if (!url.endsWith('.webp')) {
-                  photosUrls.push(url)
-                }
-              }
-            })
-            let productId = product.sku
+      const products = items.map((item) => {
+        const pictures = ["normal", "big", "small"].map((size) => {
+          if (item.picture && item.picture[size]) {
+            return item.picture[size].url;
+          }
+        });
 
-            if (product.hidden_metafields) {
-              const meta = product.hidden_metafields.find(metafield => metafield.field === 'trustvox_id')
-              if (meta && meta.value) {
-                productId = meta.value
-              }
+        const product = {
+          product_id: item.product_id,
+          sku: item.sku,
+          name: item.name,
+          price: item.final_price || item.price || 10,
+          url: item.permalink || `https://${store.domain}/${item.sku}`,
+        };
+
+        if (pictures.find((p) => p !== null)) {
+          product.pictures = pictures.filter((pp) => typeof pp === "string");
+        }
+
+        return product;
+      });
+
+      const customer = {};
+
+      const { buyers } = order;
+      if (buyers && Array.isArray(buyers) && buyers.length) {
+        // only the first buyer is supported by now :/
+        for (let b = 0; b <= 0; b++) {
+          const buyer = buyers[b];
+          if (buyer.name) {
+            const { name } = buyer;
+            customer.first_name = name.given_name;
+
+            if (name.middle_name) {
+              customer.last_name = name.middle_name;
             }
 
-            trustVoxItens.push({
-              name: product.name,
-              id: productId,
-              url: product.permalink || `https://${store.domain}/${product.slug}`,
-              price: product.price,
-              photos_urls: photosUrls,
-              tags: [productId],
-              extra: {
-                sku: product.sku
-              }
-            })
-          })
-        promises.push(promise)
+            if (name.family_name) {
+              customer.last_name = `${customer.last_name} ${name.middle_name}`;
+            }
+          }
+
+          customer.email = buyer.main_email;
+
+          if (
+            buyer.phones &&
+            Array.isArray(buyer.phones) &&
+            buyer.phones.length
+          ) {
+            const { phones } = buyer;
+            for (let p = 0; p <= 0; p++) {
+              const phone = phones[p];
+              customer.phone = phone.number;
+            }
+          }
+        }
       }
 
-      const trustAuth = await getStore(storeId).catch(err => console.error(err))
+      let deliveredData = order.updated_at;
 
-      const tvStoreId = configObj.trustvox_store_id || trustAuth.trustvox_store_id
-      const tvStoreToken = configObj.store_token || trustAuth.store_token
+      if (order.fulfillments) {
+        const fulfillment = order.fulfillments.find(
+          (ful) => ful.status === "delivered"
+        );
+        if (fulfillment && fulfillment.date_time) {
+          deliveredData = fulfillment.date_time;
+        }
+      }
 
-      Promise
-        .all(promises)
-        .then(() => {
-          const buyers = (order.buyers && order.buyers[0]) || {}
-          const data = {
-            order_id: order._id,
-            delivery_date: (order.fulfillment_status && order.fulfillment_status.updated_at) || order.updated_at,
-            client: {
-              first_name: buyers.name ? buyers.name.given_name : buyers.display_name,
-              last_name: buyers.name ? buyers.name.given_name : undefined,
-              email: buyers.main_email,
-              phone_number: buyers.phones ? buyers.phones[0].number : undefined
-            },
-            items: trustVoxItens
-          }
-          return trustvox.sales.new(tvStoreId, tvStoreToken, data)
-        })
-        .then(resp => {
-          logger.log(`--> New order #${order.number} / #${storeId} / ${resp.data && resp.data.order_id}`)
-        })
-        .catch(err => {
-          const { response } = err
-          let message = err.message
-          if (response && response.data) {
-            message = JSON.stringify(response.data)
-          }
-          logger.error(`--> Trustvox Err for order #${order.number} / #${storeId}`, message)
-        })
+      const data = {
+        products,
+        customer,
+        order_id: order._id,
+        order_date: order.created_at,
+        delivery_date: deliveredData,
+      };
+
+      return martanApi({
+        method: "post",
+        url: "/orders.json",
+        headers: {
+          "X-Store-Id": appData.integration_store_id,
+          "X-Token": appData.integration_token,
+        },
+        data,
+      });
     })
-}
+    .then(({ data }) => {
+      functions.logger.log(
+        `Pedido ${orderId} enviado com sucesso para Martan: ${data.id}`
+      );
+    })
+    .catch((error) => {
+      functions.logger.error(
+        `Erro ao tentar enviar pedido ${orderId} para Martan`,
+        error
+      );
+
+      functions.logger.error(error.response.data);
+      functions.logger.error(JSON.stringify(error.response.data));
+    });
+};

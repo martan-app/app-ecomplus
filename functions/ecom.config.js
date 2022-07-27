@@ -1,6 +1,6 @@
 /* eslint-disable comma-dangle, no-multi-spaces, key-spacing */
 const adminSettings = {
-  token: {
+  integration_token: {
     schema: {
       type: 'string',
       title: 'Martan Integration Token',
@@ -8,7 +8,7 @@ const adminSettings = {
     },
     hide: true
   },
-  store_id: {
+  integration_store_id: {
     schema: {
       type: 'number',
       title: 'Martan Integration Store-ID',
@@ -170,15 +170,8 @@ procedures.push({
   title: app.title,
 
   triggers: [
-    // Receive notifications when new order is created:
-    {
-      resource: 'orders',
-      action: 'create',
-    },
-
     // Receive notifications when order financial/fulfillment status are set or changed:
     // Obs.: you probably SHOULD NOT enable the orders triggers below and the one above (create) together.
-
     {
       resource: 'orders',
       field: 'fulfillment_status',
@@ -189,13 +182,6 @@ procedures.push({
       resource: 'products',
       action: 'create',
     },
-
-    // Receive notifications when cart is edited:
-    {
-      resource: 'carts',
-      action: 'create',
-    },
-    // Feel free to create custom combinations with any Store API resource, subresource, action and field.
   ],
 
   webhooks: [

@@ -142,4 +142,11 @@ exports.updateTokens = functions.pubsub.schedule(cron).onRun(() => {
     return appSdk.updateTokens()
   })
 })
+
+exports.syncWithMartan = functions.pubsub.topic('ecomplus-webhooks').onPublish((message) => {
+  return prepareAppSdk().then(appSdk => {
+    console.log({appSdk, message})
+  })
+});
+
 console.log(`-- Sheduled update E-Com Plus tokens '${cron}'`)
