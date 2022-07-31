@@ -62,7 +62,7 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
             }
 
             if (name.family_name) {
-              customer.last_name = `${customer.last_name} ${name.middle_name}`;
+              customer.last_name = `${customer.last_name} ${name.family_name}`;
             }
           }
 
