@@ -1,5 +1,5 @@
 const axios = require("axios");
-const baseURL = "http://api.martan.app/v1/";
+const baseURL = "https://api.martan.app/v1/";
 const pkg = require('./../../package.json')
 
 const instance = axios.create({
