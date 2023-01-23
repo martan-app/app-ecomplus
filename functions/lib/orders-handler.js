@@ -25,7 +25,7 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
       const { items } = order;
 
       const products = items.map((item) => {
-        const pictures = ["normal", "big", "small"].map((size) => {
+        const pictures = ["normal"].map((size) => {
           if (item.picture && item.picture[size]) {
             return item.picture[size].url;
           }
@@ -46,24 +46,23 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
         return product;
       });
 
-      const customer = {};
+      const customers = [];
 
       const { buyers } = order;
       if (buyers && Array.isArray(buyers) && buyers.length) {
         // only the first buyer is supported by now :/
+        const customer = {}
         for (let b = 0; b <= 0; b++) {
           const buyer = buyers[b];
           if (buyer.name) {
             const { name } = buyer;
-            customer.first_name = name.given_name;
+            customer.name = name.given_name;
 
-            if (name.middle_name) {
-              customer.last_name = name.middle_name;
+            if (name.given_name) {
+              customer.name = `${customer.name} ${name.given_name}`
             }
-
-            if (name.family_name) {
-              customer.last_name = `${customer.last_name} ${name.family_name}`;
-            }
+          } else {
+            customer.name = buyer.display_name
           }
 
           customer.email = buyer.main_email;
@@ -80,6 +79,8 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
             }
           }
         }
+
+        customers.push(customer);
       }
 
       let deliveredData = order.updated_at;
@@ -95,7 +96,7 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
 
       const data = {
         products,
-        customer,
+        customers,
         order_id: order._id,
         order_date: order.created_at,
         delivery_date: deliveredData,
