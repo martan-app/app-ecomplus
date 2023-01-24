@@ -56,10 +56,16 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
           const buyer = buyers[b];
           if (buyer.name) {
             const { name } = buyer;
-            customer.name = name.given_name;
-
             if (name.given_name) {
-              customer.name = `${customer.name} ${name.given_name}`
+              customer.name = name.given_name
+            }
+
+            if (name.middle_name) {
+              customer.name = `${customer.name} ${name.middle_name}`
+            }
+
+            if (name.family_name) {
+              customer.name = `${customer.name} ${name.family_name}`
             }
           } else {
             customer.name = buyer.display_name
