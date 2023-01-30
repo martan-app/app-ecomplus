@@ -8,9 +8,10 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
     .then(async ({ response }) => {
       const order = response.data;
       if (
-        order.fulfillment_status &&
-        order.fulfillment_status.current &&
-        order.fulfillment_status.current !== "delivered"
+        !order.fulfillment_status ||
+        (order.fulfillment_status &&
+          order.fulfillment_status.current &&
+          order.fulfillment_status.current !== "delivered")
       ) {
         // ignore current trigger
         const err = new Error();
@@ -51,24 +52,24 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
       const { buyers } = order;
       if (buyers && Array.isArray(buyers) && buyers.length) {
         // only the first buyer is supported by now :/
-        const customer = {}
+        const customer = {};
         for (let b = 0; b <= 0; b++) {
           const buyer = buyers[b];
           if (buyer.name) {
             const { name } = buyer;
             if (name.given_name) {
-              customer.name = name.given_name
+              customer.name = name.given_name;
             }
 
             if (name.middle_name) {
-              customer.name = `${customer.name} ${name.middle_name}`
+              customer.name = `${customer.name} ${name.middle_name}`;
             }
 
             if (name.family_name) {
-              customer.name = `${customer.name} ${name.family_name}`
+              customer.name = `${customer.name} ${name.family_name}`;
             }
           } else {
-            customer.name = buyer.display_name
+            customer.name = buyer.display_name;
           }
 
           customer.email = buyer.main_email;
@@ -125,7 +126,7 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
     })
     .catch((error) => {
       if (error.name === SKIP_TRIGGER_NAME) {
-        return
+        return;
       }
 
       functions.logger.error(
