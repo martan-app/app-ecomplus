@@ -26,12 +26,6 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
       const { items } = order;
 
       const products = items.map((item) => {
-        const pictures = ["normal"].map((size) => {
-          if (item.picture && item.picture[size]) {
-            return item.picture[size].url;
-          }
-        });
-
         const product = {
           product_id: item.product_id,
           sku: item.sku,
@@ -40,8 +34,16 @@ module.exports = async ({ appSdk, appData, storeId, orderId }) => {
           url: item.permalink || `https://${store.domain}/${item.sku}`,
         };
 
-        if (pictures.find((p) => p !== null)) {
-          product.pictures = pictures.filter((pp) => typeof pp === "string");
+        if (item.picture) {
+          const pictures = ["normal", "big"].map((size) => {
+            if (item?.picture[size]) {
+              return item.picture[size].url;
+            }
+          });
+    
+          if (pictures.find((p) => p !== null)) {
+            product.pictures = pictures.filter((pp) => typeof pp === "string");
+          }
         }
 
         return product;
