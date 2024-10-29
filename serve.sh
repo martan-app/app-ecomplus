@@ -3,4 +3,4 @@ cd ./functions
 firebase functions:config:get > .runtimeconfig.json
 firebase functions:shell
 cd ..
-firebase emulators:start
+firebase emulators:start --port 5001

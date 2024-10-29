@@ -1,5 +1,4 @@
-const { baseUri, pkg } = require('./../__env')
-
+const { pkg, baseUri } = require('./../__env')
 // configured base app body
 const { app } = require('./../ecom.config')
 
