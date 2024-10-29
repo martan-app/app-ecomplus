@@ -3,7 +3,12 @@
     "predeploy": [
       "npm --prefix \"$RESOURCE_DIR\" run"
     ],
-    "source": "functions"
+    "source": "functions",
+    "endpoints": {
+      "app": {
+        "availableMemoryMb": 512
+      }
+    }
   },
   "hosting": {
     "public": "hosting",
@@ -16,5 +21,10 @@
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    }
   }
 }
