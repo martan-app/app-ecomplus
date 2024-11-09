@@ -37,7 +37,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install root dependencies
-        run: npm ci --only=production --ignore-scripts
+        run: npm install --only=production --ignore-scripts
 
       - name: Install functions dependencies
         run: cd functions && npm ci --only=production --no-optional && cd ..
