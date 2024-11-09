@@ -1,4 +1,3 @@
-require('dotenv').config()
 // setup server and app options from Functions config (and mocks)
 const { GCLOUD_PROJECT, FIREBASE_CONFIG, FUNCTION_REGION, CLIENT_ID, CLIENT_SECRET, MARTAN_OAUTH_URL, MARTAN_OAUTH_UI_URL } = process.env
 const { pkg, server } = require('firebase-functions').config()
