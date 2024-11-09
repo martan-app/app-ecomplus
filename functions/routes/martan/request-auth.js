@@ -9,7 +9,7 @@ const {
   generateCodeVerifier,
   generateCodeChallenge
 } = require('../../utils/pkce')
-const getAppData = require('../../lib/store-api/get-app-data')
+
 exports.get = async ({ admin, appSdk }, req, res) => {
   const { query } = req
   const storeId =
@@ -21,10 +21,10 @@ exports.get = async ({ admin, appSdk }, req, res) => {
     return res.status(400).send('X-Store-Id not found at request.')
   }
 
-  const appData = await getAppData({ appSdk, storeId }).catch(() => null)
-  if (!appData) {
-    return res.status(400).send('Você precisa instalar o app Martan na sua loja. https://app.e-com.plus/#/apps')
-  }
+  // const appData = await getAppData({ appSdk, storeId }).catch(() => null)
+  // if (!appData) {
+  //   return res.status(400).send('Você precisa instalar o app Martan na sua loja. https://app.e-com.plus/#/apps')
+  // }
   const redirectUrl = baseUri + '/martan/auth-callback'
   const state = {
     ecomplus_store_id: storeId
