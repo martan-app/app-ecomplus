@@ -49,6 +49,10 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           SERVER_OPERATOR_TOKEN: ${{ secrets.SERVER_OPERATOR_TOKEN }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          MARTAN_OAUTH_UI_URL: ${{ secrets.MARTAN_OAUTH_UI_URL }}
+          MARTAN_OAUTH_URL: ${{ secrets.MARTAN_OAUTH_URL }}
         run: npm run deploy
 
   update-app-json:
