@@ -40,7 +40,7 @@ jobs:
         run: npm install --only=production --ignore-scripts
 
       - name: Install functions dependencies
-        run: cd functions && npm ci --only=production --no-optional && cd ..
+        run: cd functions && npm install --only=production --no-optional && cd ..
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -122,7 +122,7 @@ jobs:
 
       - name: Install root dependencies
         if: steps.pkg_version.outputs.publish == 1
-        run: npm ci --only=production --ignore-scripts
+        run: npm install --only=production --ignore-scripts
 
       - name: Run publish script
         if: steps.pkg_version.outputs.publish == 1
