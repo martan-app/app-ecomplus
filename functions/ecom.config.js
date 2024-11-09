@@ -5,9 +5,9 @@ const { baseUri } = require('./__env')
  */
 
 const app = {
-  app_id: 666,
-  title: 'Martan',
-  slug: 'martan-app',
+  app_id: 131673,
+  title: 'Martan - Avaliação de Produtos',
+  slug: 'martan-avaliacao-de-produtos',
   type: 'external',
   state: 'active',
   authentication: true,
