@@ -20,10 +20,10 @@ const config = [
   `pkg.version=${version}`,
   `pkg.name=${name}`,
   `server.operator_token=${SERVER_OPERATOR_TOKEN}`,
-  `auth.clientId=${CLIENT_ID}`,
-  `auth.clientSecret=${CLIENT_SECRET}`,
-  `auth.martanOAuthUrl=${MARTAN_OAUTH_URL}`,
-  `auth.martanOAuthUIUrl=${MARTAN_OAUTH_UI_URL}`
+  `auth.client_id=${CLIENT_ID}`,
+  `auth.client_secret=${CLIENT_SECRET}`,
+  `auth.martan_oauth_url=${MARTAN_OAUTH_URL}`,
+  `auth.martan_oauth_ui_url=${MARTAN_OAUTH_UI_URL}`
 ]
 if (SERVER_BASE_URI) {
   config.push(`server.base_uri=${SERVER_BASE_URI}`)
