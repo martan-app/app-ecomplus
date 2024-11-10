@@ -18,8 +18,8 @@ module.exports = {
   pkg: {
     ...pkg
   },
-  clientId: CLIENT_ID || auth.clientId,
-  clientSecret: CLIENT_SECRET || auth.clientSecret,
-  martanOAuthUrl: MARTAN_OAUTH_URL || auth.martanOAuthUrl,
-  martanOAuthUIUrl: MARTAN_OAUTH_UI_URL || auth.martanOAuthUIUrl
+  clientId: CLIENT_ID || auth.client_id,
+  clientSecret: CLIENT_SECRET || auth.client_secret,
+  martanOAuthUrl: MARTAN_OAUTH_URL || auth.martan_oauth_url,
+  martanOAuthUIUrl: MARTAN_OAUTH_UI_URL || auth.martan_oauth_ui_url
 }
