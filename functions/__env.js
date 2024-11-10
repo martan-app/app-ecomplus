@@ -1,6 +1,6 @@
 // setup server and app options from Functions config (and mocks)
 const { GCLOUD_PROJECT, FIREBASE_CONFIG, FUNCTION_REGION, CLIENT_ID, CLIENT_SECRET, MARTAN_OAUTH_URL, MARTAN_OAUTH_UI_URL } = process.env
-const { pkg, server } = require('firebase-functions').config()
+const { pkg, server, auth } = require('firebase-functions').config()
 
 let projectId = GCLOUD_PROJECT
 if (!projectId && FIREBASE_CONFIG) {
@@ -18,8 +18,8 @@ module.exports = {
   pkg: {
     ...pkg
   },
-  clientId: CLIENT_ID,
-  clientSecret: CLIENT_SECRET,
-  martanOAuthUrl: MARTAN_OAUTH_URL,
-  martanOAuthUIUrl: MARTAN_OAUTH_UI_URL
+  clientId: CLIENT_ID || auth.clientId,
+  clientSecret: CLIENT_SECRET || auth.clientSecret,
+  martanOAuthUrl: MARTAN_OAUTH_URL || auth.martanOAuthUrl,
+  martanOAuthUIUrl: MARTAN_OAUTH_UI_URL || auth.martanOAuthUIUrl
 }
