@@ -1,6 +1,6 @@
 const axios = require('axios')
 const qs = require('querystring')
-const { baseUri } = require('../../__env')
+const { baseUri, martanOAuthUrl, clientId, clientSecret } = require('../../__env')
 async function getAccessToken (code, storeId, admin) {
   // const tokenUrl = 'https://authentication.martan.app/oauth/token'
   // Buscar o documento na coleção ecomplus_auth_challenge usando where
@@ -15,14 +15,14 @@ async function getAccessToken (code, storeId, admin) {
   }
 
   const challengeData = challengeQuery.data()
-  const tokenUrl = process.env.MARTAN_OAUTH_URL + '/oauth/token'
+  const tokenUrl = martanOAuthUrl + '/oauth/token'
 
   const redirectUrl = baseUri + '/martan/auth-callback'
 
   const data = qs.stringify({
     grant_type: 'authorization_code',
-    client_id: process.env.CLIENT_ID,
-    client_secret: process.env.CLIENT_SECRET,
+    client_id: clientId,
+    client_secret: clientSecret,
     code,
     redirect_uri: redirectUrl,
     code_verifier: challengeData.code_verifier
@@ -49,7 +49,7 @@ async function getAccessToken (code, storeId, admin) {
 }
 
 async function refreshToken (refresh) {
-  const tokenUrl = process.env.MARTAN_OAUTH_URL + '/oauth/token'
+  const tokenUrl = martanOAuthUrl + '/oauth/token'
 
   const data = qs.stringify({
     grant_type: 'refresh_token',
@@ -71,6 +71,5 @@ async function refreshToken (refresh) {
     throw error
   }
 }
-
 
 module.exports = { getAccessToken, refreshToken }
