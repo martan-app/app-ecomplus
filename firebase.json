@@ -23,8 +23,14 @@
     "indexes": "firestore.indexes.json"
   },
   "emulators": {
+    "firestore": {
+        "port": "13001"
+    },
+    "hosting": {
+      "port": "5001"
+    },
     "functions": {
-      "port": 5001
+      "port": "5003"
     }
   }
 }

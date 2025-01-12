@@ -1,3 +1,4 @@
+const { logger } = require('firebase-functions')
 // read configured E-Com Plus app data
 const getAppData = require('./../../lib/store-api/get-app-data')
 const saveOrder = require('./../../lib/save-order')
@@ -32,9 +33,13 @@ exports.post = ({ appSdk, admin }, req, res) => {
       }
 
       const auth = await getAuth({ db: admin.firestore(), storeId })
+        .catch((err) => {
+          logger.error(`Error getting auth for store ${storeId}`, err)
+          return null
+        })
 
       /* DO YOUR CUSTOM STUFF HERE */
-      if (!auth.access_token || !auth.martan_id) {
+      if (!auth || !auth.access_token || !auth.martan_id) {
         const err = new Error()
         err.name = SKIP_TRIGGER_NAME
         throw err
@@ -42,7 +47,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
 
       switch (trigger.resource) {
         case 'orders': {
-          return saveOrder({ appData, appSdk, storeId, trigger, admin })
+          return saveOrder({ appSdk, storeId, trigger, admin })
         }
         case 'products':
           return Promise.resolve()
@@ -60,10 +65,10 @@ exports.post = ({ appSdk, admin }, req, res) => {
         const msg = `Webhook for ${storeId} unhandled with no authentication found`
         const error = new Error(msg)
         error.trigger = JSON.stringify(trigger)
-        console.error(error)
+        logger.error(error)
         res.status(412).send(msg)
       } else {
-        // console.error(err)
+        logger.error(err)
         // request to Store API with error response
         // return error status code
         res.status(500)
