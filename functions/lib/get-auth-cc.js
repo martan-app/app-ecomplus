@@ -1,13 +1,13 @@
 const { logger } = require('firebase-functions')
 
-module.exports = async ({ db, storeId }) => {
+const getAuthFromCloudCommerce = async ({ db, storeId }) => {
   if (!db || !storeId) {
     logger.error('Missing required parameters for getAuth', { storeId })
     throw new Error('Missing required parameters')
   }
 
   try {
-    const martanAuthRef = db.collection('martan_app_auth')
+    const martanAuthRef = db.collection('ecomplus_app_auth_cc')
     const query = martanAuthRef
       .where('store_id', '==', storeId)
       .orderBy('updated_at', 'desc')
@@ -29,3 +29,5 @@ module.exports = async ({ db, storeId }) => {
     throw error
   }
 }
+
+module.exports = { getAuthFromCloudCommerce }

@@ -1,6 +1,6 @@
 const axios = require('axios')
+const { logger } = require('firebase-functions')
 const baseURL = 'https://api.martan.app/v1/'
-// const baseURL = 'http://localhost:56186/v1/'
 const pkg = require('./../../package.json')
 
 const instance = axios.create({
@@ -13,13 +13,40 @@ const instance = axios.create({
 })
 
 instance.interceptors.response.use(
-  (response) => response, // Retorna a resposta normalmente se sucesso
+  (response) => response,
   (error) => {
-    // Força um erro para qualquer código >= 400
-    if (error.response && error.response.status >= 400) {
-      return Promise.reject(error)
+    // Log error details
+    logger.error('[Martan API Error]', {
+      status: error.response?.status,
+      data: error.response?.data,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        headers: error.config?.headers
+      }
+    })
+
+    if (error.response) {
+      // Handle specific error status codes
+      switch (error.response.status) {
+        case 401:
+          // Token expired or invalid
+          error.code = 'UNAUTHORIZED'
+          break
+        case 429:
+          // Rate limit exceeded
+          error.code = 'RATE_LIMIT'
+          break
+        default:
+          error.code = 'API_ERROR'
+      }
+    } else if (error.code === 'ECONNABORTED') {
+      error.code = 'TIMEOUT'
+    } else {
+      error.code = 'NETWORK_ERROR'
     }
-    return Promise.reject(error) // Rejeita qualquer outro erro
+
+    return Promise.reject(error)
   }
 )
 
