@@ -1,8 +1,9 @@
 const { logger } = require("firebase-functions")
-const errorHandling = require("./error-handling")
 const { getAuthFromCloudCommerce } = require("../get-auth-cc")
 const admin = require("firebase-admin")
 const cloudCommerceApi = require("./cloud-api")
+const errorHandling = require("./../store-api/error-handling")
+
 /**
  * Create metafield on order to track synchronization status
  * @param {object} params - Function parameters
