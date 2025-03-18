@@ -3,8 +3,7 @@ const { logger } = require('firebase-functions')
 const getAppData = require('./../../lib/store-api/get-app-data')
 // const saveOrder = require('./../../lib/save-order')
 const getAuth = require('../../lib/auth/get-auth')
-// const addOrders = require('../../pubsub/orders/add-orders')
-const saveOrder = require('../../lib/save-order')
+const addOrders = require('../../pubsub/orders/add-orders')
 
 const SKIP_TRIGGER_NAME = 'SkipTrigger'
 const ECHO_SUCCESS = 'SUCCESS'
@@ -20,7 +19,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
    * Ref.: https://developers.e-com.plus/docs/api/#/store/triggers/
    */
   const trigger = req.body
-  console.log(trigger)
+  logger.log(trigger)
   // get app configured options
   getAppData({ appSdk, storeId })
     .then(async (appData) => {
@@ -50,17 +49,17 @@ exports.post = ({ appSdk, admin }, req, res) => {
       switch (trigger.resource) {
         case 'orders': {
           logger.info(`[#${storeId}][Webhook] Recebendo pedido: ${trigger.resource_id}`)
-          await saveOrder({
-            appSdk,
-            storeId,
-            trigger,
-            orderBody: null,
-            admin,
-            isCloudCommerce: false,
-            cloudCommerceAuth: null
-          })
+          // await saveOrder({
+          //   appSdk,
+          //   storeId,
+          //   trigger,
+          //   orderBody: null,
+          //   admin,
+          //   isCloudCommerce: false,
+          //   cloudCommerceAuth: null
+          // })
           // return saveOrder({ appSdk, storeId, trigger, admin })
-          // return await addOrders({ trigger, storeId })
+          return await addOrders({ trigger, storeId })
           // return Promise.resolve()
         }
         case 'products':
