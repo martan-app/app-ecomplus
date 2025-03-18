@@ -19,7 +19,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
    * Ref.: https://developers.e-com.plus/docs/api/#/store/triggers/
    */
   const trigger = req.body
-
+  console.log(trigger)
   // get app configured options
   getAppData({ appSdk, storeId })
     .then(async (appData) => {
@@ -49,8 +49,17 @@ exports.post = ({ appSdk, admin }, req, res) => {
       switch (trigger.resource) {
         case 'orders': {
           logger.info(`[#${storeId}][Webhook] Recebendo pedido: ${trigger.resource_id}`)
+          await saveOrder({
+            appSdk,
+            storeId,
+            trigger,
+            orderBody: null,
+            admin,
+            isCloudCommerce: false,
+            cloudCommerceAuth: null
+          })
           // return saveOrder({ appSdk, storeId, trigger, admin })
-          return await addOrders({ trigger, isCloudCommerce: false, storeId })
+          return await addOrders({ trigger, storeId })
           // return Promise.resolve()
         }
         case 'products':
