@@ -10,7 +10,7 @@ const errorHandling = require('./error-handling')
  * @param {string} [value=successfully] - Metafield value
  * @returns {Promise<void>}
  */
-module.exports = async ({ appSdk, storeId }, orderId, value = 'successfully') => {
+module.exports = async ({ appSdk, storeId, orderId, value = 'successfully' }) => {
   if (!appSdk || !storeId || !orderId) {
     throw new Error('Missing required parameters')
   }
