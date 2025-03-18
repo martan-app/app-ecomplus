@@ -21,7 +21,7 @@ exports.processOrders = functions
     await new Promise((resolve) => setTimeout(resolve, 3000))
     const { order, isCloudCommerce, storeId: storeIdString, trigger } = message.json
     const storeId = parseInt(storeIdString)
-    logger.info(`[#${storeId}] Processando pedido: ${order.number}`)
+    logger.info(`[#${storeId}] Processando pedido: ${order?.number || 'webhook'}`)
     let cloudCommerceAuth = null
     if (isCloudCommerce) {
       cloudCommerceAuth = await getAuthFromCloudCommerce({
@@ -36,7 +36,7 @@ exports.processOrders = functions
         appSdk,
         storeId,
         trigger,
-        orderBody: order,
+        orderBody: order || null,
         admin,
         isCloudCommerce,
         cloudCommerceAuth
