@@ -2,7 +2,7 @@
 const { logger } = require('firebase-functions')
 const { Firestore, Timestamp } = require('firebase-admin/firestore')
 
-const { refreshToken } = require('./martan-api/auth')
+const { refreshToken } = require('../../lib/martan-api/auth')
 
 module.exports = async (admin) => {
   if (!admin) {

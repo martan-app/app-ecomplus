@@ -1,4 +1,4 @@
-exports.post = ({ appSdk }, req, res) => {
+exports.post = ({ appSdk }, _req, res) => {
   // force update tokens service
   try {
     appSdk.updateTokens()

@@ -40,7 +40,7 @@ if (!app.version && pkg.version) {
   app.version = pkg.version.replace(/-.*/, '')
 }
 
-module.exports = (req, res) => {
+module.exports = (_req, res) => {
   // showing app info on root route
   res.send(app)
 }
