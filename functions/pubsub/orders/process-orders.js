@@ -38,7 +38,7 @@ exports.processOrders = functions
         trigger,
         orderBody: order || null,
         admin,
-        isCloudCommerce,
+        isCloudCommerce: isCloudCommerce || false,
         cloudCommerceAuth
       })
     } catch (error) {
