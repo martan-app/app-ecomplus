@@ -53,6 +53,7 @@ jobs:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           MARTAN_OAUTH_UI_URL: ${{ secrets.MARTAN_OAUTH_UI_URL }}
           MARTAN_OAUTH_URL: ${{ secrets.MARTAN_OAUTH_URL }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         run: npm run deploy
 
   update-app-json:

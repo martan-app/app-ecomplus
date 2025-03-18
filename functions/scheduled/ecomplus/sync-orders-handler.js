@@ -61,7 +61,7 @@ const fetchDeliveredOrders = async (
     `&updated_at<=${endDate.toISOString()}` +
     '&metafields.field!=martan_synchronized_order' +
     '&sort=updated_at' +
-    '&limit=10'
+    '&limit=100'
 
   try {
     const promises = []
