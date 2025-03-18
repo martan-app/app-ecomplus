@@ -64,6 +64,20 @@ const app = {
     ],
     carts: [
       'GET' // List all carts (no auth needed to read specific cart only)
+    ],
+    'orders/hidden_metafields': [
+      'GET',
+      'POST',
+      'PUT',
+      'PATCH',
+      'DELETE'
+    ],
+    'orders/metafields': [
+      'GET',
+      'POST',
+      'PUT',
+      'PATCH',
+      'DELETE'
     ]
   },
 

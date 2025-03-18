@@ -1,13 +1,14 @@
 const { logger } = require('firebase-functions')
+const Sentry = require('../services/sentry')
 
-module.exports = async ({ db, storeId }) => {
+const getAuthFromCloudCommerce = async ({ db, storeId }) => {
   if (!db || !storeId) {
     logger.error('Missing required parameters for getAuth', { storeId })
     throw new Error('Missing required parameters')
   }
 
   try {
-    const martanAuthRef = db.collection('martan_app_auth')
+    const martanAuthRef = db.collection('ecomplus_app_auth_cc')
     const query = martanAuthRef
       .where('store_id', '==', storeId)
       .orderBy('updated_at', 'desc')
@@ -20,12 +21,17 @@ module.exports = async ({ db, storeId }) => {
     }
 
     const authData = docs.docs[0].data()
-    logger.debug(`Auth retrieved for store #${storeId}`, {
-      updatedAt: authData.updated_at
-    })
     return authData
   } catch (error) {
     logger.error(`Error getting auth for store #${storeId}:`, error)
+    Sentry.captureException(error, {
+      extra: {
+        storeId,
+        error: error.stack
+      }
+    })
     throw error
   }
 }
+
+module.exports = { getAuthFromCloudCommerce }

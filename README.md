@@ -163,3 +163,14 @@ After deploying the project at least once (may be out of date with your local so
 ### Firebase tools
 
 You can also use [`firebase-tools` CLI](https://firebase.google.com/docs/cli) to run tests/deploy with custom config or scripts.
+
+Emulador
+
+`firebase emulators:start --import=exported-data.json`
+
+Run function
+`firebase function:shell`
+
+### Enviroment variables
+
+To use environment variables that reflect in the Firebase deployment, you need to add the variable to your action secrets and modify the `firebase-deploy.js` file by adding them to the `config` object. This way, the variable will be injected at deployment time.

@@ -47,7 +47,6 @@ async function getAccessToken (code, storeId, admin) {
     // Remove used challenge
     await challengeRef.delete()
     return data
-
   } catch (error) {
     logger.error('[Martan] Failed to get access token:', error.response?.data || error.message)
     const err = new Error('Failed to get Martan access token')
@@ -80,7 +79,6 @@ async function refreshToken (refresh) {
       }
     )
     return data
-
   } catch (error) {
     logger.error('[Martan] Failed to refresh token:', error.response?.data || error.message)
     const err = new Error('Failed to refresh Martan access token')

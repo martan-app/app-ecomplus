@@ -30,11 +30,6 @@ module.exports = async ({ appSdk, storeId }, orderId, value = 'successfully') =>
       },
       auth.row
     )
-
-    logger.info(`[Store API] Metafield created successfully: ${orderId}`, {
-      storeId,
-      value
-    })
   } catch (error) {
     const message = error.response?.data || error.message
     logger.error(`[Store API] Error creating metafield: ${orderId}`, {

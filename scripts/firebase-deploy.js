@@ -7,7 +7,8 @@ const {
   CLIENT_ID,
   CLIENT_SECRET,
   MARTAN_OAUTH_URL,
-  MARTAN_OAUTH_UI_URL
+  MARTAN_OAUTH_UI_URL,
+  SENTRY_DSN
 } = process.env
 
 require('./scripts-minification')
@@ -23,7 +24,8 @@ const config = [
   `auth.client_id=${CLIENT_ID}`,
   `auth.client_secret=${CLIENT_SECRET}`,
   `auth.martan_oauth_url=${MARTAN_OAUTH_URL}`,
-  `auth.martan_oauth_ui_url=${MARTAN_OAUTH_UI_URL}`
+  `auth.martan_oauth_ui_url=${MARTAN_OAUTH_UI_URL}`,
+  `sentry.dsn=${SENTRY_DSN}`
 ]
 if (SERVER_BASE_URI) {
   config.push(`server.base_uri=${SERVER_BASE_URI}`)

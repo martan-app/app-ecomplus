@@ -15,16 +15,16 @@ const instance = axios.create({
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Log error details
-    logger.error('[Martan API Error]', {
-      status: error.response?.status,
-      data: error.response?.data,
-      config: {
-        url: error.config?.url,
-        method: error.config?.method,
-        headers: error.config?.headers
-      }
-    })
+    // // Log error details
+    // logger.error('[Martan API Error]', {
+    //   status: error.response?.status,
+    //   data: error.response?.data,
+    //   config: {
+    //     url: error.config?.url,
+    //     method: error.config?.method,
+    //     headers: error.config?.headers
+    //   }
+    // })
 
     if (error.response) {
       // Handle specific error status codes

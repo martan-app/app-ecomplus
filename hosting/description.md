@@ -1,3 +1,5 @@
+# Martan
+
 Martan - Avaliação de Produtos é uma solução de prova social projetada para ajudar marcas a construir confiança e aumentar as vendas. Com Martan, você coleta automaticamente avaliações de produtos com fotos e vídeos, exibindo-as em widgets totalmente personalizáveis que não comprometem a velocidade do seu site.
 
 Desenvolvido exclusivamente para E-Com Plus, Martan - Avaliação de Produtos se integra aos temas da sua loja e, para personalizações adicionais, oferece uma API para que você construa seu próprio widget.

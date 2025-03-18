@@ -1,4 +1,4 @@
-const { default: axios } = require("axios")
+const { default: axios } = require('axios')
 
 const cloudCommerceApi = async ({ url, method = 'get', data, headers }, auth) => {
   return axios({

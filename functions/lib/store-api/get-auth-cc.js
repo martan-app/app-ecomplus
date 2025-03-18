@@ -7,13 +7,13 @@ const getAuthFromApiKey = async (storeId, authId, apiKey) => {
   }
 
   const options = {
-    method: "POST",
-    url: "https://ecomplus.io/v2/authenticate",
-    headers: { "content-type": "application/json", "X-Store-Id": storeId },
+    method: 'POST',
+    url: 'https://ecomplus.io/v2/authenticate',
+    headers: { 'content-type': 'application/json', 'X-Store-Id': storeId },
     data: {
       _id: authId,
-      api_key: apiKey,
-    },
+      api_key: apiKey
+    }
   }
 
   try {

@@ -7,7 +7,7 @@
  * @param {string} storeId - The store ID
  * @returns {Promise<Object>} Product object with detailed information
  */
-async function parseProduct(appSdk, item, store, storeId) {
+async function parseProduct (appSdk, item, store, storeId) {
   const { response } = await appSdk.apiRequest(storeId, `products/${item.product_id}.json`)
   const { data } = response
 
@@ -46,7 +46,7 @@ async function parseProduct(appSdk, item, store, storeId) {
  * @param {Object} buyer - The buyer object from order
  * @returns {Object} Parsed customer data
  */
-function parseCustomer(buyer) {
+function parseCustomer (buyer) {
   const customer = {}
 
   // Parse customer name
@@ -78,7 +78,7 @@ function parseCustomer(buyer) {
  * @param {string} storeId - The store ID
  * @returns {Promise<Object>} Parsed order data
  */
-async function parseOrderToMartan(appSdk, order, store, storeId) {
+async function parseOrderToMartan (appSdk, order, store, storeId) {
   // Parse products with delay between requests
   const products = []
   for (const item of order.items) {
