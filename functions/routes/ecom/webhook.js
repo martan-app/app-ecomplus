@@ -3,7 +3,8 @@ const { logger } = require('firebase-functions')
 const getAppData = require('./../../lib/store-api/get-app-data')
 // const saveOrder = require('./../../lib/save-order')
 const getAuth = require('../../lib/auth/get-auth')
-const addOrders = require('../../pubsub/orders/add-orders')
+// const addOrders = require('../../pubsub/orders/add-orders')
+const saveOrder = require('../../lib/save-order')
 
 const SKIP_TRIGGER_NAME = 'SkipTrigger'
 const ECHO_SUCCESS = 'SUCCESS'
@@ -59,7 +60,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
             cloudCommerceAuth: null
           })
           // return saveOrder({ appSdk, storeId, trigger, admin })
-          return await addOrders({ trigger, storeId })
+          // return await addOrders({ trigger, storeId })
           // return Promise.resolve()
         }
         case 'products':
