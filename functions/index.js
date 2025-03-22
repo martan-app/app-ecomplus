@@ -241,11 +241,3 @@ exports.onOrderUpdate = onOrderUpdate
 exports.syncOrders = syncOrders
 exports.syncOrdersCloudCommerce = syncOrdersCloudCommerce
 exports.processOrders = processOrders
-// exports.processOrders = functions
-//   .pubsub
-//   .topic('process-orders')
-//   .onPublish((message) => {
-//     const data = message.json
-//     console.log('Recebi um pedido:', data)
-//     return null
-//   })
