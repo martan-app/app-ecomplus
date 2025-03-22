@@ -4,8 +4,6 @@ const { Timestamp } = require('firebase-admin/firestore')
 const { setup } = require('@ecomplus/application-sdk')
 const logger = require('firebase-functions/logger')
 
-// const saveOrder = require('../../lib/save-order')
-
 const cloudCommerceApi = require('../../lib/cloudcommerce-api/cloud-api')
 const { getAuthFromCloudCommerce } = require('../../lib/auth/get-auth-cc')
 const addOrders = require('../../pubsub/orders/add-orders')
@@ -52,8 +50,7 @@ const fetchDeliveredOrders = async (
   const endDate = new Date()
   endDate.setDate(endDate.getDate() - 3)
 
-  const endpoint =
-    '/orders.json' +
+  const endpoint = '/orders.json' +
     `?fields=${ordersFields}` +
     '&financial_status.current=paid' +
     '&fulfillment_status.current=delivered' +
@@ -61,7 +58,7 @@ const fetchDeliveredOrders = async (
     `&updated_at<=${endDate.toISOString()}` +
     '&metafields.field!=martan_synchronized_order' +
     '&sort=updated_at' +
-    '&limit=100'
+    '&limit=250'
 
   try {
     const promises = []
@@ -96,14 +93,13 @@ const fetchDeliveredOrders = async (
     logger.info(
       `-> [Martan/Ecom] Importing ${orders.length} orders for #${storeId} from ${startDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' })} to ${endDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' })}`
     )
-
     for (const order of orders) {
       await addOrders({
         order,
         isCloudCommerce: true,
         storeId
       })
-      await new Promise((resolve) => setTimeout(resolve, 10000))
+      await new Promise((resolve) => setTimeout(resolve, 5000))
     }
   } catch (error) {
     const errorMessage = error.response
@@ -132,11 +128,10 @@ module.exports = async (isCloudCommerce = false) => {
     // Shuffle store IDs for better load distribution
     const shuffledStoreIds = storeIds.sort(() => Math.random() - 0.5)
 
-    await Promise.allSettled(
-      shuffledStoreIds.map((storeId) =>
-        fetchDeliveredOrders({ appSdk, storeId }, isCloudCommerce)
-      )
-    )
+    for (const storeId of shuffledStoreIds) {
+      await fetchDeliveredOrders({ appSdk, storeId }, isCloudCommerce)
+      await new Promise(resolve => setTimeout(resolve, 3000))
+    }
 
     logger.info('Completed processing all stores')
   } catch (error) {
