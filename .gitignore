@@ -65,6 +65,6 @@ typings/
 functions/.env.local
 
 .vscode/*
-exported/*
-exported-data/*
-exported-new/*
+exported/
+exported-data/
+exported-new/

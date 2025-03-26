@@ -232,6 +232,7 @@ const { onNewOrder } = require('./events/ecomplus/on-new-order')
 const { onOrderUpdate } = require('./events/ecomplus/on-update-order')
 const { syncOrders, syncOrdersCloudCommerce } = require('./scheduled/ecomplus/sync-orders')
 const { processOrders } = require('./pubsub/orders/process-orders')
+const { syncOrdersFailed } = require('./scheduled/ecomplus/sync-orders-failed')
 
 exports.ecomplusUpdateTokens = ecomplusUpdateTokens
 exports.ecomplusUpdateTokensCC = ecomplusUpdateTokensCC
@@ -241,3 +242,4 @@ exports.onOrderUpdate = onOrderUpdate
 exports.syncOrders = syncOrders
 exports.syncOrdersCloudCommerce = syncOrdersCloudCommerce
 exports.processOrders = processOrders
+exports.syncOrdersFailed = syncOrdersFailed
