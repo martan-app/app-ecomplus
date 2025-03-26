@@ -35,20 +35,20 @@ const listStoreIds = async (isCloudCommerce = false) => {
 const ordersFields =
   'fulfillments,source_name,domain,number,status,financial_status.current,fulfillment_status.current,amount,payment_method_label,shipping_method_label,buyers._id,buyers.main_email,buyers.name,buyers.display_name,buyers.phones,buyers.doc_number,transactions.payment_link,transactions.intermediator.transaction_code,items.product_id,items.sku,items.picture,items.slug,items.name,items.quantity,created_at,updated_at,metafields,store_id'
 
-const fetchDeliveredOrders = async (
+const getOrdersFromStoreID = async (
   { appSdk, storeId },
   isCloudCommerce = false
 ) => {
   if (!appSdk || !storeId) {
-    logger.warn('Missing required parameters for fetchDeliveredOrders')
+    logger.warn('Missing required parameters for getOrdersFromStoreID')
     return
   }
 
   const startDate = new Date()
-  startDate.setDate(startDate.getDate() - 7)
+  startDate.setDate(startDate.getDate() - 10)
 
   const endDate = new Date()
-  endDate.setDate(endDate.getDate() - 3)
+  endDate.setDate(endDate.getDate() - 1)
 
   const endpoint = '/orders.json' +
     `?fields=${ordersFields}` +
@@ -58,26 +58,21 @@ const fetchDeliveredOrders = async (
     `&updated_at<=${endDate.toISOString()}` +
     '&metafields.field!=martan_synchronized_order' +
     '&sort=updated_at' +
-    '&limit=250'
+    '&limit=200'
 
   try {
-    const promises = []
     let cloudCommerceAuth = null
+    let orderReq = appSdk.apiRequest(storeId, endpoint, 'get')
     if (isCloudCommerce) {
       cloudCommerceAuth = await getAuthFromCloudCommerce({
         db: admin.firestore(),
         storeId
       })
-      // promises.push(cloudCommerceApi({ url: '/stores/me.json' }, cloudCommerceAuth))
-      promises.push(cloudCommerceApi({ url: endpoint }, cloudCommerceAuth))
-    } else {
-      // promises.push(appSdk.apiRequest(storeId, '/stores/me.json', 'GET'))
-      promises.push(appSdk.apiRequest(storeId, endpoint, 'get'))
+      orderReq = cloudCommerceApi({ url: endpoint }, cloudCommerceAuth)
     }
 
-    const [ordersResponse] = await Promise.all(promises)
+    const ordersResponse = await orderReq
 
-    // const store = storeResponse?.response?.data || storeResponse?.data || {}
     const orders =
       ordersResponse?.response?.data?.result ||
       ordersResponse?.data?.result ||
@@ -93,6 +88,7 @@ const fetchDeliveredOrders = async (
     logger.info(
       `-> [Martan/Ecom] Importing ${orders.length} orders for #${storeId} from ${startDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' })} to ${endDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' })}`
     )
+
     for (const order of orders) {
       await addOrders({
         order,
@@ -129,7 +125,7 @@ module.exports = async (isCloudCommerce = false) => {
     const shuffledStoreIds = storeIds.sort(() => Math.random() - 0.5)
 
     for (const storeId of shuffledStoreIds) {
-      await fetchDeliveredOrders({ appSdk, storeId }, isCloudCommerce)
+      await getOrdersFromStoreID({ appSdk, storeId }, isCloudCommerce)
       await new Promise(resolve => setTimeout(resolve, 3000))
     }
 

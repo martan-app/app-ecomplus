@@ -43,7 +43,7 @@ async function handler ({ order, context, db, appSdk }) {
       data
     })
 
-    functions.logger.info(`[#${storeId}] Pedido enviado com sucesso: ${order.number}`)
+    functions.logger.info(`[#${storeId}] Pedido enviado com sucesso: ${order.order_id}`)
 
     // Update sync status
     await db.collection('ecomplus_orders_to_sync').doc(orderId).update({

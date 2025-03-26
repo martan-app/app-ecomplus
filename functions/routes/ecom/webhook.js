@@ -19,7 +19,11 @@ exports.post = ({ appSdk, admin }, req, res) => {
    * Ref.: https://developers.e-com.plus/docs/api/#/store/triggers/
    */
   const trigger = req.body
-  logger.log(trigger)
+  // FOR NOW, SKIP ALL TRIGGERS
+  // TODO: REMOVE THIS IF YOU WANT TO ENABLE WEBHOOKS
+  if (trigger) {
+    return res.send(ECHO_SKIP)
+  }
   // get app configured options
   getAppData({ appSdk, storeId })
     .then(async (appData) => {
