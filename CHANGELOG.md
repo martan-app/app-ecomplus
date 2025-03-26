@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.0.0 (2025-03-26)
+
+
+### Features
+
+* autenticacao via autorizacao e concessão de token ([8f7d317](https://github.com/ecomplus/application-starter/commit/8f7d31788d5587e2587ea221dab523ee77ef9326))
+* job para reprocessar pedidos que falharam durante os eventos ([704e8d7](https://github.com/ecomplus/application-starter/commit/704e8d7ebe77fdf97d48d7b2519d9d06bcf4814b))
+* lidando com envio de pedido da v1 e v2 ([bc13929](https://github.com/ecomplus/application-starter/commit/bc13929480fb3f927dc21cf16b4c008b76e63384))
+* melhorias no fluxo de oauth2 e suporte a tokens cloud-commerce ([c859dea](https://github.com/ecomplus/application-starter/commit/c859dea1dc124d6226c610e4577e01fa3479c2ab))
+* utilizando sentry para manipular exceções ([22b34f0](https://github.com/ecomplus/application-starter/commit/22b34f02d31555441d94ed35d5a609e3ab55dd8c))
+* **webhook:** handling orders webhooks ([2fb712f](https://github.com/ecomplus/application-starter/commit/2fb712ff5905633d19e162f6ab2ca729e4ae4673))
+
+
+### Bug Fixes
+
+* atualização dos index do firebase ([44724bd](https://github.com/ecomplus/application-starter/commit/44724bd62880df72e8846ed2e6bb0a5cfa2fa5f3))
+* caminho para errorHandling ([c365851](https://github.com/ecomplus/application-starter/commit/c3658517e57cc1aca4dcf9dc364d3b2eb1551021))
+* evitar erro quando for webhook ([4080c94](https://github.com/ecomplus/application-starter/commit/4080c94906a240092514c55dcf6e2ad2355e3eba))
+* injetar variavel do sentry ([6efd13c](https://github.com/ecomplus/application-starter/commit/6efd13ceca3e9ec61e0516bc77f93a6857fbf0bb))
+* **orders-handler:** avoiding duplicating the customer middle name ([6d5b996](https://github.com/ecomplus/application-starter/commit/6d5b99608f62ac56ed512ce203a2d02efca68056))
+* **orders-handler:** ignoring webhooks with status diferente of delivered ([5c40b69](https://github.com/ecomplus/application-starter/commit/5c40b690e6eae00a850663ee83412829df825196))
+* **orders-handler:** ignoring webhooks with status diferente of delivered ([50a646d](https://github.com/ecomplus/application-starter/commit/50a646db02215cd327ce414725fe5547dea228d4))
+* **orders-handler:** prevent orders without financial_status from being processed ([cd2f19b](https://github.com/ecomplus/application-starter/commit/cd2f19b1658f71576969cec62ce31752483bd7dc))
+* parametro de funcao ([5536e0c](https://github.com/ecomplus/application-starter/commit/5536e0c2a2c3f8bf37bac1253379e049d383795a))
+* url correta para oauth2 martan ([a51da70](https://github.com/ecomplus/application-starter/commit/a51da701e7248245d9353b259fac744543830a51))
+
 ## [1.0.0-starter.26](https://github.com/ecomplus/application-starter/compare/v1.0.0-starter.25...v1.0.0-starter.26) (2022-02-24)
 
 ## [1.0.0-starter.25](https://github.com/ecomplus/application-starter/compare/v1.0.0-starter.24...v1.0.0-starter.25) (2022-02-24)
